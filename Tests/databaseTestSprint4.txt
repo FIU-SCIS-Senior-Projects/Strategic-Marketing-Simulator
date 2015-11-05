@@ -1,0 +1,46 @@
+
+
+
+
+	
+	
+	
+
+PHPUnit 4.8.9 by Sebastian Bergmann and contributors.
+
+Runtime:	PHP 5.5.9-1ubuntu4.11
+Configuration:	/srv/marketsim/www/Tests/phpunit.xml
+
+.......................
+
+Time: 290 ms, Memory: 11.75Mb
+
+OK (23 tests, 23 assertions)
+
+
+ --- database --- 
+
+  ok   - databaseTest::test_getadvertisingNameAndPriceValid
+  ok   - databaseTest::test_getadvertisingNameAndPriceInvalid
+  ok   - databaseTest::test_getPersonnel
+  ok   - databaseTest::test_getResearch
+  ok   - databaseTest::test_getCurrentPeriod
+  ok   - databaseTest::test_getCurrentPeriodInvald
+  ok   - databaseTest::test_getOTA
+  ok   - databaseTest::test_updateOTA
+  ok   - databaseTest::test_updateOTAInvalid
+  ok   - databaseTest::test_isDecisionTable
+  ok   - databaseTest::test_isDecisionTableInvalid
+  ok   - databaseTest::test_getDecisionsTableColumns
+  ok   - databaseTest::test_getDecisionsTableColumnsInvalid
+  ok   - databaseTest::test_getStudentDecisions
+  ok   - databaseTest::test_getStudentDecisionsInvalid
+  ok   - databaseTest::test_updateMarketSegment
+  ok   - databaseTest::test_addNews
+  ok   - databaseTest::test_addGame_period
+  ok   - databaseTest::test_addNews_parameters
+  ok   - databaseTest::test_getNews_by_id
+  ok   - databaseTest::test_getNews_by_idInvalid
+  ok   - databaseTest::test_getNews_by_game
+  ok   - databaseTest::test_getNews_by_gameInvalid
+

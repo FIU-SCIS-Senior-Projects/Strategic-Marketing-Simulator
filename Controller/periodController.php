@@ -1,4 +1,5 @@
 <?php
+
 ini_set('display_errors', 1);
 error_reporting(~0);
 //require ("/srv/marketsim/www/Model/database.php");
@@ -30,39 +31,40 @@ class periodController
 		
 		$period = $game['periodNum'] -1;
 		
+		$groups = $obj->getGroupsforGame($stuGroup['game']);
 		
-		
-		//var_dump($period);
+	
 		//print_r("current period is " . $period);
-		$periodDecName = "GAME_" . $stuGroup['game'] . "_P_". ($period);
-		$decisions = $obj->getStudentDecisions($periodDecName, $stuGroup['id']); // = false for first period
+		//print_r($obj->getStudentDecisions2($game['id'], $period+1, $stuGroup['id']));
+		$decisions = $obj->getStudentDecisions2($game['id'], $period+1, $stuGroup['id']); // = false for first period
+	
+	
 		
-		$advertTotal = $obj->getadvertising();
-		$adSize = count($advertTotal);
 		//getting advertising list for home display - this is only those selected by student
 		$personnelName = $obj->getPersonnel();
-		//var_dump($personnelName);
+	
 		$personnel = array();
-		$temp = "You have selected:<br/>";
+		$temp = "You have selected:<br/><br/>";
 		
 		
 		$advertising = array();
 		if($decisions != false)
 		{
-		for($a = 1; $a< $adSize; $a++)
+		for($a = 0; $a< 11; $a++)
 		{
-			$adv = "adv" . $a;
-			if($decisions[$adv] == 0)
+			$adv = "adv" . ($a+1);
+			if($decisions[0][$adv] == 0)
 			{
 				break;
 			}
 			else
 			{
-				$temp = $obj->getadvertisingNameAndPrice($a);
+				$temp = $obj->getadvertisingNameAndPrice($a+1);
 				
 				array_push($advertising, $temp)	; // $advertising [0][0]['type'] then [1][0] and [2][0] to access
 			}
-			
+	
+		
 			
 		}
 		
@@ -74,72 +76,42 @@ class periodController
 		{
 			
 			$per = "P" . $a;
-			if($decisions[$per]!= 0)
+			if($decisions[0][$per]!= 0)
 			{
+			
 				
-				$temp .= "<p>" .
-				$a . 
+				$perTemp = "<p>You selected " .
+				$decisions[0][$per] . 
 				" ". 
-				$personnelName[$a]['name'] 
-				." $". ($personnelName[$a]['cost'] 
-				* $a) .
-				"</p>";
+				$personnelName[$a-1]['name'] 
+				." at a cost of $". floatval($personnelName[$a-1]['cost'] ).
 				
-				array_push($personnel, $temp)	; 
+				"each </p>";
+				
+				array_push($personnel, $perTemp)	; 
 			
 			
 			}
 		}
 		}
-		$groups = $obj->getGameGroupsId($stuGroup['game']);
-		//var_dump($groups);
+		
+	
 		$returnArray = array();
-		
-		$makertshare = periodController::marketShare($periodDecName, $game, $groups); // this will be moved to commit later
-		
+
+		$marketshare = $obj->getMarketShare ($stuGroup['game'],$period ); // this will be moved to commit later
+	
 		$groupcount = $obj->getGameGroupCount($game['id']);
 		$groupcount = implode("", $groupcount);
-		//var_dump($groups);
-			//var_dump($stuGroup['id']);
-			//var_dump($makertshare);
-			if($makertshare != false)
-			{
-			$marketShareByGroup = array();
-		for($k = 0; $k <  $groupcount; $k++)
-		{
-			$id = $groups[$k]['id'];
-			$temp = "group" . $id;
-						
-				array_push($marketShareByGroup, $makertshare[$temp]);
-			
-			
-		}
-		}
-		else
-		{
-			$marketShareByGroup = false;
-		}
+		
 		
 		$rev = $obj->getRevenue($stuArr['hotel']);
 		
 		$leaderboard = $obj -> getLeaderboardTable($stuGroup['game']);
-		//sorting array to present in descending order
-		for($i = 0; $i< count($leaderboard ); $i++)
-		{
-			for($j = 0; $j< count($leaderboard ); $j++)
-			{
-				if(intval($leaderboard[$i]['revenue']) > intval($leaderboard[$j]['revenue']))
-				{
-					$temp = $leaderboard[$j]['revenue'];
-					$leaderboard[$j]['revenue'] = $leaderboard[$i]['revenue'];
-					$leaderboard[$i]['revenue'] = $temp;
-				}
-			}
-		}
-		
-		$selectedResearch = $obj->getPeriodResearch($periodDecName, $stuGroup['id']);
+		$leaderboard = array_reverse($leaderboard);
+		$selectedResearch = $obj->getPeriodResearch($stuGroup['game'], $game['periodNum'],$stuGroup['id']);
+	
 		$researched = array();
-		//var_dump($selectedResearch);
+		$resHotelId = NULL;
 		if($selectedResearch != false)
 		{
 			foreach ($selectedResearch as $res)
@@ -155,28 +127,33 @@ class periodController
 			
 				}
 			}
+			$resHotelId = $obj->gethotelIdbyName($researched[0]);
 		}
-		//var_dump($researched);
-		$researchDisplay = "You have not selected a group to research yet";
+
+		$researchDisplay = "you have not selected research for this period";
 		$researchDisplay2 = "";
 		$resCount = 1;
+		
+		if($resHotelId  != null)
+		{
+		
+		$resDecisions = $obj->getAdvertFromStrats($stuGroup['game'], $period,$resHotelId[0]['id']);
+		//var_dump($resDecisions);
 		if(count($researched) > 0)
 		{
 			$temp = "research" . $resCount;
 			$researchDisplay = "</h4><h4 style = 'color:green'>" .$researched[0]."<h4 style='font-weight: bold'>
 								<h4>Average rate : $";
 			$id = $obj->gethotelIdbyName($researched[0]);	
-			//Var_dump($researched[0]);
-			$decs = $obj->getStudentDecisions($periodDecName, $id[0]['id'])	;	
-			//var_dump($decs);
-			$researchDisplay.= $decs['aveRate'];
+		
+			$researchDisplay.= $resDecisions[0]['aveRate'];
 			
 			//Var_dump($decs['aveRate']);
 			$resAdvert = array();
-			for($a = 1; $a< $adSize; $a++)
+			for($a = 1; $a< 12; $a++)
 			{
 				$adv = "adv" . $a;
-				if($decisions[$adv] == 0)
+				if($decisions[0][$adv] == "0")
 				{
 					break;
 				}
@@ -198,108 +175,204 @@ class periodController
 					$i++;							
 				}	
 				
-				$researchDisplay2 .= "<br/><h4 style='font-weight: bold'>Number of personnel<h4><h4>Entry Level : ".$decs['P1'] ."</h4>
-				<h4>Manager in training : ".$decs['P2'] ."</h4>
-				<h4>Experienced Professional : ".$decs['P3'] ."</h4>";
+				$researchDisplay2 = "<br/><h4 style='font-weight: bold'>Number of personnel<h4><h4>Entry Level : ".$decisions[0]['P1'] ."</h4>
+				<h4>Manager in training : ".$decisions[0]['P2'] ."</h4>
+				<h4>Experienced Professional : ".$decisions[0]['P3'] ."</h4>";
 				
-				$researchDisplay2.="<h4 style='font-weight: bold'>OTA Allocations : " . $decs['OTA'] . "</h4>";
+				$researchDisplay2.="<h4 style='font-weight: bold'>OTA Allocations : " . $decisions[0]['OTA'] . "</h4>";
 			
-				
+			}	
+		}
+		else
+		{
+			$researchDisplay = "you have not selected research for this period";
+			$researchDisplay2 = "";
 		}
 		
 		
-		//var_dump($leaderboard);
+	
 		
 		
 		// I need to return research for the prior period.  That means that I need to update the database with all the entries
 		//I think I will merely return a string here or empty string if use hasn't selected research
 
-		
-		array_push($returnArray, $decisions, $stuArr, $stuGroup, $stuLoc, $game ,$periodDecName , $advertising, $personnel, $period, $makertshare, $marketShareByGroup, $groups, $rev, $leaderboard, $researchDisplay, $researchDisplay2 );
-		
+		$groupMarketShare = $obj->getMarketShareforGroup($stuGroup['game'], $period, $stuGroup['id']);
+		array_push($returnArray, $decisions, $stuArr, $stuGroup, $stuLoc, $advertising, $personnel, $period, $marketshare, $groups, $rev, $leaderboard, $researchDisplay, $researchDisplay2, $groupMarketShare  );
+		//var_dump($groupMarketShare);
 		return $returnArray;
 		
 	}
 	
-	public static function  marketShare($gamePeriod, $game)
+	
+	//γ gamma is a random number between .95 and 1.05 that is applied to each decisions that a group makes and to the news impact
+	public static function gamma()
 	{
+		while(($gamma = rand(95,105)/100) != 0)
+		{return $gamma;}
+		return .9;
 		
-		$obj2 = new database();
-		$groupcount = $obj2->getGameGroupCount($game['id']);
-		//var_dump($groupcount);
-		$groupcount = implode("", $groupcount);
-		$marketShare = $gamePeriod . "_MarketShare";
-		$temp = $obj2->getMarketShareTable($gamePeriod);
-	//var_dump($temp);
-	return $obj2->getMarketShareTable($gamePeriod);
 	}
+	//μ and ω (mu and omega) are impacts between .7 and 1.3 applied to the game 
+	//they come in the form of failry god
+	public static function muOmega($muOmega)
+	{
+		switch ($muOmega) {
+			case "Very Good":
+			return 1.3;
+			break;
+			case "Fairly Good":
+			return 1.15;
+			break;
+			case "None":
+			return 1;
+			break;
+			case "Fairly Bad":
+			return .85;
+			break;
+			case "Very Bad":
+			return .7;
+			break;
+			default: return "no valid mu/omega provided";
+       }
+}
+	
+	//the impact function queries the strat decisions table at the end of a period and does some math.
+	
+	//= I_j=[ ∏_(i=0)^n▒〖φ_i γ_i 〗]μωγ   // see accompanying documentation
+	public function IMPACT_SUB_J($decisions, $muOrOmega)
+	{
+		$I = 0.00;
+				
+		foreach ($decisions as $d)
+		{
+			
+			$I = $I + (floatval($d)  * periodController::gamma());  //sum of decisions impact * random modifier gamma
+		}
+		
+		return $I * ($muOrOmega * periodController::gamma()); // news impact * modifier * summation of modified decisions 
+		
+	}
+	
+	//delta returns a group's revenue for a period.  it is modified by ro (OTA) which sells rooms at a reduced price epsilon
+	//$alpha is the average rate for a group
+	public function DELTA ($game, $period, $beta, $group)
+	{
+		$obj = new database();
+		$epsilon = $obj->Epsilon($game, $period, $group);
+		
+		$ro= $obj->getOTA();
+		$aveRateArr = $obj->Alpha($game, $period);
+		$alpha = 0;
+		$BETA_J = 0;
+		
+		
+		foreach($aveRateArr as $s) // getting alpha for group g
+		{
+						
+			if($s['hotel'] == $group)
+			{
+				$alpha = $s['aveRate'];
+				
+		
+			}
+		}
+		foreach($beta as $b) // getting alpha for group g
+		{
+						
+			if($b['group'] == $group)
+			{
+				$BETA_J = $b['BETA_J'];
+					
+			}
+		}
+		
+		
+		return floor($alpha *(($BETA_J - $epsilon[0]['OTA']) + ($epsilon[0]['OTA']*$ro[0]['discount'])));
+	}
+	
+	 
+
+  // sort alphabetically by name
+
+		public static function compare_BETA_J($a, $b)
+		{
+			return strnatcmp($a['BETA_J'], $b['BETA_J']);
+		}
+		
+		public function reverseBETA($BETA)
+		{
+			$count = intval(count($BETA) / 2);
+						
+			for($i = 0; $i < $count; $i++)
+			{
+				$lower = $BETA[$i]['BETA_J'];
+				$upper = $BETA[(count($BETA)-1)-$i]['BETA_J'];
+				$BETA[$i]['BETA_J'] = $upper;
+				$BETA[(count($BETA)-1)-$i]['BETA_J'] = $lower;
+				
+			}
+			return $BETA;
+		}
+	
+	
+	//this function returns the matket share for a particular group.  number of rooms is rounded down to nearest int
+	public function BETA_SUB_J($group, $game, $period, $theta)
+	{
+		$obj = new database();
+		$SUM_OF_ALPHA = 0;
+		$ALPHA_SUB_j = 1;
+		$aveRateArr = $obj->Alpha($game, $period);
+		
+	
+		foreach($aveRateArr as $sum) // getting sum of alpha and alpha for group g
+		{
+			$SUM_OF_ALPHA = $SUM_OF_ALPHA + $sum['aveRate'];
+			
+			
+			if($sum['hotel'] == $group)
+			{
+				
+				$ALPHA_SUB_j = $sum['aveRate'];
+				
+			}
+		}
+	
+		return floor(($ALPHA_SUB_j * $theta) / $SUM_OF_ALPHA) + rand(-500,500);  // returning rooms sold * groups aveRate divided by sum of all ave rates
+	
+	}
+	
+	public static function theta($array_of_I, $num_of_groups, $num_of_total_rooms)
+	{
+		$I_SUM = 0.0;
+		
+		foreach($array_of_I as $I)
+		{
+				$I_SUM = $I_SUM + $I[1];
+		}
+		return floor($I_SUM * (floatval($num_of_total_rooms) / $num_of_groups));
+	}
+	
+	
 	
 	public static function commit($comments, $email)
 	{
 		//this call to createMarketShare will be moved to the commit button
 		
+		//this is where I put the game math function calls
+		
 		$obj = new database();
 		$stuArr = $obj->getStudent($email);
 		$stuGroup = $obj->getGroup($stuArr['hotel']);
-		$stuLoc = $obj-> getLocation($stuGroup['location']);
-		//$str = implode(" ", $stuGroup);
-		//print_r($stuGroup['name']);
-		
 		$game = $obj->getGame($stuGroup['game']);
-		
 		$period = $game['periodNum'];
-		
-		//var_dump($period);
-		//print_r("current period is " . $period);
-		$groupcount = $obj->getGameGroupCount($game['id']);
-		$groupcount = implode("", $groupcount);
-		$periodDecName = "GAME_" . $stuGroup['game'] . "_P_". ($period);
-		$groups = $obj->getGameGroupsId($stuGroup['game']);
-		$marketShare = $periodDecName . "_MarketShare";
-		
-		if($obj->isMarketShare($marketShare) == 0) //if the table doesn't already exist, create it, otherwise update it
-		{
-		
-			$obj->createMarketShare($periodDecName, $groupcount,$groups, $period );
-		
-		}
-		
-		
-			/*This will be moved to the commit button
-			**************************this update will be replaced when the game functionality is better understood.  ***************************
-			****************************For now, the number of rooms and rooms sold are selected arbitrarily*****************************/
-			$rooms = 2000;
-			$roomsSold = 1600;
-			$byGroup = array();
-			$counter = 0;
-			for($i = 1; $i < $groupcount; $i++)
-			{	
-				$temp = rand(200,320);
-				array_push($byGroup, $temp );
-				$counter = $counter + $temp;
-			}
-			array_push($byGroup,($roomsSold - $counter));
-			print_r(count($obj->isMarketShareForPeriod($periodDecName, $period)));
-			if(count($obj->isMarketShareForPeriod($periodDecName, $period)) < 2)
-			{
-				print_r($obj->updateMarketShare($periodDecName,$groupcount, $rooms, $roomsSold, $byGroup, $groups, $period));
-				$obj->incrementGamePeriodNum($game['id'], $period+1); // this will have to be removed from the final version when we have the game working - instead this will depend on a timer
-				//HERE i HAVE TO ADD THE COMMENTS
-				$obj->addComments($game['id'], $period, $stuGroup['id'], $comments);
-				$obj->addNews( $game['periodNum'], '', $period+2);
-				return true;
-			}
-			else
-			{
-			 print_r("You have already committed for this period");
-			 header("Location: ../index.php");
-			}
-			
-			//*************************end of arbitrary assignment of rooms sold for period
-		
+		$obj->addComments($game['id'], $period, $stuGroup['id'], $comments);
+		header("Location: ../index.php");
+
 		
 	
 	}
+	
+	
 
 }
 ?>

@@ -633,7 +633,7 @@ class databasetest extends \PHPUnit_Framework_testCase
 	function test_getLocationByType()
 	
 	
-	*/
+	*///sprint 5
 	
 	
 
@@ -642,10 +642,10 @@ class databasetest extends \PHPUnit_Framework_testCase
      */
 	
 	
-	
-	function test_getMarketShareTable()
-	{
 		$obj = new database();
+	function test_getMarketShareTable()
+	
+	{
 		$game_period = "GAME_3_P_1";
 		
 		return $this->assertGreaterthan(0, count($obj->getMarketShareTable($game_period)));

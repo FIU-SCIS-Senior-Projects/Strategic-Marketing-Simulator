@@ -1,11 +1,11 @@
 <?php
-include("connection.php");
+include("../Model/connection.php");
 ini_set('display_errors', 1);
 error_reporting(~0);
 
 
 
-	require 'Model/database.php';
+	require '../Model/database.php';
 	session_start();
 	$groupRes = Array();
 	if (isset($_SESSION['login user'])) 
@@ -38,17 +38,17 @@ function redirect(site) {
 <html>
 <head>
 <title>Strategic Marketing Simulator</title>
-<link rel="stylesheet" href="/Styles/style.css" type="text/css" />
-<link href="css/bootstrap.min.css" rel="stylesheet">
+<link rel="stylesheet" href="../Styles/style.css" type="text/css" />
+<link href="../css/bootstrap.min.css" rel="stylesheet">
  <!-- Custom CSS -->
- <link href="css/logo-nav.css" rel="stylesheet">
+ <link href="../css/logo-nav.css" rel="stylesheet">
 </head>
 <body>
 <nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
         <div class="container">
             <!-- Brand and toggle get grouped for better mobile display -->
             <div class="navbar-header">
-				<img src="/Images/fiu_logo_edit.png" alt=""> 
+				<img src="../Images/fiu_logo_edit.png" alt=""> 
 	                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
                     <span class="sr-only">Toggle navigation</span>
                     <span class="icon-bar"></span>
@@ -64,22 +64,22 @@ function redirect(site) {
             <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
                 <ul class="nav navbar-nav">
                     <li>
-                        <a href="#"="a" onclick ="redirect('index.php')"> Home</a>
+                        <a href="#"="a" onclick ="redirect('../index.php')"> Home</a>
                     </li>
                     <li>
                         <a href="#"="a" onclick ="redirect('metrics.php')">Metrics</a>
                     </li>
                     <li>
-                         <a href="#"="a" onclick ="redirect('stratDecisions.php')">Strategic Decisions</a>
+                         <a href="#"="a" onclick ="redirect('/stratDecisions.php')">Strategic Decisions</a>
                     </li>
 					<li>
                         <a href="#"="a" onclick ="redirect('manage.php')"> Manage</a>
                     </li>
                     <li>
-                        <a href="#"="a" onclick ="redirect('news.php')">News</a>
+                        <a href="#"="a" onclick ="redirect('/news.php')">News</a>
                     </li>
                     <li>
-                         <a href="#"="a" onclick ="redirect('login.php')">Login</a>
+                         <a href="#"="a" onclick ="redirect('/login.php')">Login</a>
                     </li>
 					
                 </ul>
@@ -115,7 +115,7 @@ function redirect(site) {
          <div id= "group" class= "cascade"></div> 
 		
 		 <input type="submit" name="submit" action="submitValues()" value = "submit" class="btn btn-primary" /> <br /><br />
-		 <a href='/createGroup.php'>Click me to create a new group</a>
+		 <a href='createGroup.php'>Click me to create a new group</a>
         </div><br />
 				
 			
@@ -127,14 +127,14 @@ function redirect(site) {
   </div>
    
   
-<script src="jquery-1.9.0.min.js"></script>
+<script src="../js/jquery-1.9.0.min.js"></script>
 <script>
 $(document).ready(function(){
 $("#savecascade").submit(function(){
 var get_data=$("#savecascade").serialize();
 $.ajax({
 			type: "POST",
-			url: "insertGroup.php",
+			url: "../Controller/insertGroup.php",
 			data: {"csc":get_data},
 			cache: false,
 			success: function(html) {    
@@ -142,7 +142,7 @@ $.ajax({
 				if(html == true)
 				{
 					alert("You successfully joined a group")
-				window.location.href= "/index.php";
+				window.location.href= "../index.php";
 				}
 			}
 		});
@@ -159,12 +159,12 @@ $("select#drop1").change(function(){
 		
 	 $.ajax({
 			type: "POST",
-			url: "fetch_group.php",
+			url: "../Controller/fetch_group.php",
 			data: "game_id="+ game_id,
 			cache: false,
 			beforeSend: function () { 
 				
-				$('#group').html('<img src="loader.gif" alt="" width="24" height="24">');
+				$('#group').html('<img src="/Images/loader.gif" alt="" width="24" height="24">');
 			},
 			success: function(html) {    
 				$("#group").html( html );

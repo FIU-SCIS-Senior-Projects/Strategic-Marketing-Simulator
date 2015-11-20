@@ -15,7 +15,7 @@ $title = "";
 $content = "";
 $value = "";
 
-
+session_start();
 //if(isset($_POST['textbox_fname']) )//add admin
 if(isset($_POST['button_addAdmin']) )//add admin
 {
@@ -101,15 +101,15 @@ else if(isset($_GET['viewUsersForGame']))
 else
 {
 		//Session checking
-		/*if (isset($_SESSION['admin login'])) 
+		if (isset($_SESSION['admin login'])) 
 		{
 
 		}
 		else
 		{
-			header('Location: /login.php');
+			header('Location: /views/login.php');
 			exit;
-		}*/
+		}
 }
 
 

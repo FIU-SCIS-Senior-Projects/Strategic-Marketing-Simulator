@@ -18,7 +18,7 @@
 <br />
 
 	<h1 style ="color:blue">Strategic Marketing Simulator</h1> 
-	<div class =""><form action="validate2.php" method="post" style="height: 240px; width: 269px"><!--
+	<div class =""><form action="../Controller/loginController.php" method="post" style="height: 240px; width: 269px"><!--
         <input height"31" name="image1" src="/Images/Title.png" type="image" width="666" />--><br />
 		<div class="container">
 			<h2>Account Login</h2>
@@ -34,7 +34,7 @@
 				<br />
 				<span id="confirmMessage" class = "confirmMessage"></span>
 			<input type="submit" name="submit" value = "login" class="btn btn-primary" />
-			<a href="/createAccount.php">Create an Account</a>&nbsp; |&nbsp; 
+			<a href="/views/createAccount.php">Create an Account</a>&nbsp; |&nbsp; 
 			<a href="/forgotPW.php">Forgot Password</a>
 			</div>
 			
@@ -72,7 +72,7 @@
 	var pwd = $('#pwd').val();
 	var email = $('#email').val();
 	
-	$.post('validate2.php',{ postpwd:pwd,postemail:email},  
+	$.post('loginController.php',{ postpwd:pwd,postemail:email},  
 	
 		function(data) 
 		{

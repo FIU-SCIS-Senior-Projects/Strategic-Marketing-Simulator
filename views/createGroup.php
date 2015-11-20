@@ -1,23 +1,23 @@
 <?php
-include("connection.php");
+include("../Model/connection.php");
 ini_set('display_errors', 1);
 error_reporting(~0);
 
 
 
-	require 'Model/database.php';
+	require '../Model/database.php';
 	session_start();
 	$groupRes = Array();
 	if (isset($_SESSION['login user'])) 
 	{			
 	echo "<div style = 'text-align: left; padding-left: 25px'>".$_SESSION['login user'] . " is not you? login 
-			<a href='/login.php'> here</a>
+			<a href='../login.php'> here</a>
 		</div>";
 
 	}
 	else
 	{
-		header('Location: /login.php');
+		header('Location: ../login.php');
 		
 	}
 
@@ -35,10 +35,10 @@ function redirect(site) {
 <html>
 <head>
 <title>Strategic Marketing Simulator</title>
-<link rel="stylesheet" href="/Styles/style.css" type="text/css" />
-<link href="css/bootstrap.min.css" rel="stylesheet">
+<link rel="stylesheet" href="../Styles/style.css" type="text/css" />
+<link href="../css/bootstrap.min.css" rel="stylesheet">
  <!-- Custom CSS -->
- <link href="css/logo-nav.css" rel="stylesheet">
+ <link href="../css/logo-nav.css" rel="stylesheet">
 </head>
 <body>
 <nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
@@ -163,7 +163,7 @@ function redirect(site) {
   
    
   
-<script src="jquery-1.9.0.min.js"></script>
+<script src="../js/jquery-1.9.0.min.js"></script>
 <script>
 $(document).ready(function(){
 $("#savecascade").submit(function(){
@@ -184,13 +184,13 @@ get_data+= "&radio=" + selectedVal;
 
 $.ajax({
 			type: "POST",
-			url: "insertNewGroup.php",
+			url: "/Controller/insertNewGroup.php",
 			data: {"csc":get_data},
 			cache: false,
 			success: function(html) {    
 				alert(html); 
 				if(html){
-				window.location.href= "/index.php";
+				window.location.href= "../index.php";
 			}
 				
 			}
@@ -209,12 +209,12 @@ $("select#drop1").change(function(){
 		
 	 $.ajax({
 			type: "POST",
-			url: "fetch_group.php",
+			url: "../Controller/fetch_group.php",
 			data: "game_id="+ game_id,
 			cache: false,
 			beforeSend: function () { 
 				
-				$('#group').html('<img src="loader.gif" alt="" width="24" height="24">');
+				$('#group').html('<img src="../Images/loader.gif" alt="" width="24" height="24">');
 			},
 			success: function(html) {    
 				$("#group").html( html );

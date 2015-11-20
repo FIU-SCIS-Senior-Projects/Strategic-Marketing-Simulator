@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-
+<!DOCTYPE html>
 <html lang="en">
 
 <head>
@@ -39,13 +39,10 @@ error_reporting(~0);
 		
 		//$decisions, $stuArr, $stuGroup, $stuLoc,  $advertising, $personnel, $period, $makertshare, $groups, $rev, $leaderboard, $researchDisplay, $researchDisplay2
 		$obj = new database();
-		
 		$decisions = $displayArr[0];
 		$stuArr = $displayArr[1];
 		$stuGroup = $displayArr[2];
 		$stuLoc = $displayArr[3];
-		
-	
 		if($decisions!=false)
 		{
 			$aveRate = $decisions[0]['aveRate'];
@@ -55,8 +52,7 @@ error_reporting(~0);
 			$aveRate = "Not yet selected";
 		}
 		
-		$advertising = $displayArr[4];
-		
+		$advertising = $displayArr[4];  
 
 		$personnel = $displayArr[5];
 		$periodNum = $displayArr[6];
@@ -68,13 +64,10 @@ error_reporting(~0);
 		$groupNum = $stuGroup['id'];
 		$groupNum = "group" . $groupNum;
 		$groupMarketShare  =  $displayArr[13];
-		$game = $obj->getGame($stuGroup['game']);
-		
-		$commented = $obj->getGroupComments($stuGroup['game'], $game['periodNum'], $stuGroup['id']);
 		if($groupMarketShare != false)
 		{
 			$groupRooms = $groupMarketShare[0]['groupSold'];
-			//$rooms = $groupMarketShare[0]['totalRooms'];
+			$rooms = $groupMarketShare[0]['totalRooms'];
 			$roomsSold = $groupMarketShare[0]['roomsSold'];
 		}
 		else
@@ -231,8 +224,7 @@ function redirect(site) {
 </head>
 
 <body>
-<form action="end_of_period.php" method="post">
-<input type='submit' align = 'right' name='commit' value = 'end_of_period'  class='btn btn-primary' /></form>
+
     <!-- Navigation -->
 	<form action= "/views/commit.php" method="post">
     <nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
@@ -291,9 +283,6 @@ function redirect(site) {
 			
     </div>
         </div>
-				
-		
-		
 		<h1 style = "color:blue" align="center">Strategic Marketing Simulator</h1> 
 		
 	<div class="bs-example" style = "padding-left: 30px; padding-right: 30px;"> 
@@ -305,14 +294,7 @@ function redirect(site) {
 			
 				
 				<div class="pull-right" style = 'padding-top:30px'>
-				<?php 
-				if($commented!=false)
-				{
-				
-                echo "<input type='submit' align = 'right' name='commit' value = 'Commit Period'  class='btn btn-primary' />";
-				
-				}
-				?>
+                <input type="submit" align = 'right' name="commit" value = "Commit Period"  class="btn btn-primary" />
 				</div>
 				
         <div class="panel-body" ><h2> Scorecard - Period <?php echo " ". $periodNum+1;?> </h2></div> 
@@ -393,14 +375,8 @@ function redirect(site) {
 <div class="bs-example2" style = "padding-left: 30px; padding-right: 30px;">
     <div class="panel panel-default " style = "padding-left: 15px; padding-right: 15px; padding-bottom:15px;">
 				<div class="pull-right" style = "padding-top:30px">
-				<?php
-				if($commented!=false)
-				{
-                echo "<a href='/views/stratDecisions.php' class='btn btn-primary'>Change decisions</a>";
-                }
-				?>
-				
-				</div>
+                <a href="/views/stratDecisions.php" class="btn btn-primary">Change decisions</a>
+                </div>
         <div class="panel-body" ><h2> Selected decisions </h2></div> 
         <div class="panel-footer clearfix" style = "background-color:white"> 
 			<div class="col-sm-2" style=""><h3 style='font-weight: bold'>Average Daily Rate</h3>
@@ -437,18 +413,13 @@ function redirect(site) {
 			
 			<div class="col-sm-2" style=""><h3 style='font-weight: bold'>Marketing Personnel</h3>
 			<?php
-			if($personnel!= "NULL")
-			{
-				foreach($personnel as $per)
+				/*foreach($personnel as $per)
 				{
 					
 					echo $per;
-				}
-			}
-			else
-			{
-				echo "<p>No Personnel selected for this period</p> ";
-			}
+				}*/
+				echo "<p> 1 Manager in Training</p><p>2 Experienced professionals</p> ";
+			
 			?>
 			
 			</div>

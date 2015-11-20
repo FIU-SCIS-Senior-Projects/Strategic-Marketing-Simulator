@@ -5,7 +5,7 @@ session_start();
 ini_set('display_errors', 1);
 error_reporting(~0);
 
-require 'Model/database.php';
+require '../Model/database.php';
 
 $fname = $_POST['fname']; 
 $lname = $_POST['lname'];
@@ -31,13 +31,13 @@ $secAnswer = $obj->genPass(strtoupper($secAnswer), $email);
 	
 		$_SESSION['login user'] = $email;
 		
-		header('Location: /joinGroup.php');
+		header('Location: ../views/joinGroup.php');
 	}
 	else
 	{
 		session_start();
 		$_SESSION['announcement'] = "Student Already in the database  <br />";
-		header('Location: /createAccount.php');
+		header('Location: ../views/createAccount.php');
 	}
 session_write_close();
 

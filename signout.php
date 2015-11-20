@@ -28,7 +28,7 @@
 				}
 				else
 					$content .= "Your Account has been logged out";
-				$content.="<br /> <a href='/login.php'>Login</a>";
+				$content.="<br /> <a href='/views/login.php'>Login</a>";
 				
 				print_r($content);
 				session_unset();

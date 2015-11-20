@@ -16,7 +16,7 @@ To items: 		update database for advertising with costs and impact
 */
 ini_set('display_errors', 1);
 error_reporting(~0);
-	require 'Model/database.php';
+	require '../Model/database.php';
 	$stuArr = array();
 	$stuGroup = array();
 	session_start();
@@ -26,7 +26,7 @@ error_reporting(~0);
 	}
 	else
 	{
-	var_dump($_POST);
+	//var_dump($_POST);
 		print_r($_SESSION['login user']. " is not you? login "); 
 		echo " <a href='/login.php'>here</a>";
 		
@@ -79,34 +79,19 @@ error_reporting(~0);
 		
 		
 		
-		
-		/*$dir_mark = number_format($dir_mark); 
-		$pub_rel = number_format($pub_rel); 
-		$print = 	number_format($print); 
-		$billBoard  = number_format($billBoard); 
-		$faceBook = number_format($faceBook); 
-		$google = number_format($google); 
-		$radio = number_format($radio); 
-		$tv = number_format($tv); 
-		$promo = number_format($promo); 
-		$eMarketing = number_format($eMarketing); 
-		$cityBus = number_format($cityBus); */
-		
-		
-		
-		
-		
 		$studentGroup = $stuGroup['name']; // used for check on Market Research so ones own group isn't displayed
 		$groupBal  = $stuGroup['balance']; 
 		//$groupBal = number_format($groupBal);  
 		
 		if(isset($_POST['commit']))
 		{
+		
 			$obj2 = new database();
 			$currentPeriod = $obj2->getCurrentPeriod($gameNum); // getting current period array
 			$periodNum = $currentPeriod[0]['periodNum']; // getting current period number
-			$decisionsTableName = "GAME_".$gameNum . "_P_".$periodNum; // name of period table
-			$isDec = $obj2->isDecisionTable($decisionsTableName);
+			$spending = $stuGroup['budget'];
+			print_r($spending);
+			//$isDec = $obj2->isDecisionTable($gameNum, $periodNum);
 		//print_r("is dec : ". $isDec);
 			$advertising = $obj2->getAdvertising();
 			$adCount = count($advertising);
@@ -128,13 +113,13 @@ error_reporting(~0);
 					}
 		$researchCount = count($selectedResearch);
 		
-			if($isDec===0) // if the table doesn't exist, create it
+		/*	if($isDec===0) // if the table doesn't exist, create it
 			{
 				//if the 
 				$strTest = $obj2->addNewPeriodDecisions($decisionsTableName, 'NULL',$periodNum,$advertising,'NULL',$OTA,$selectedResearch);
 				//print_r($strTest);// this works
 				
-			}
+			}*/
 		
 				//print_r("else of if table");
 				//dirMarket publicRel PrintAdv billBoard FacebookAds RadioSpto TVSpot promoGifts eMarket CityBus
@@ -146,66 +131,70 @@ error_reporting(~0);
 					//print_r("index 1 ");
 					array_push($arrDecisions, 1);
 					
+					$spending = $spending - $advertising[0]['cost'];
+					
 				}
 				if(isset($_POST['publicRel']))
 				{
 					//print_r("index 2 ");
 					array_push($arrDecisions, 2);
-					
+					$spending = $spending - $advertising[1]['cost'];
 				}
 				if(isset($_POST['PrintAdv']))
 				{
 					//print_r("index 3 ");
 					array_push($arrDecisions, 3);
+					$spending = $spending - $advertising[2]['cost'];
 					
 				}
 				if(isset($_POST['billBoard']))
 				{
 					//print_r("index 4 ");
 					array_push($arrDecisions, 4);
-					
+					$spending = $spending - $advertising[3]['cost'];
 				}
 				if(isset($_POST['FacebookAds']))
 				{
 					//print_r("index 5 ");
 					array_push($arrDecisions, 5);
+					$spending = $spending - $advertising[4]['cost'];
 					
 				}
 				if(isset($_POST['googleAds']))
 				{
 					//print_r("index 6 ");
 					array_push($arrDecisions, 6);
-					
+					$spending = $spending - $advertising[5]['cost'];
 				}
 				if(isset($_POST['RadioSpto']))
 				{
 					//print_r("index 7 ");
 					array_push($arrDecisions, 7);
-					
+					$spending = $spending - $advertising[6]['cost'];
 				}
 				if(isset($_POST['TVSpot']))
 				{
 					//print_r("index 8 ");
 					array_push($arrDecisions, 8);
-					
+					$spending = $spending - $advertising[7]['cost'];
 				}
 				if(isset($_POST['promoGifts']))
 				{
 					//print_r("index 9 ");
 					array_push($arrDecisions, 9);
-					
+					$spending = $spending - $advertising[8]['cost'];
 				}
 				if(isset($_POST['eMarket']))
 				{
 					//print_r("index 10 ");
 					array_push($arrDecisions, 10);
-					
+					$spending = $spending - $advertising[9]['cost'];
 				}
 				if(isset($_POST['CityBus']))
 				{
 					//print_r("index 11 ");
 					array_push($arrDecisions, 11);
-					
+					$spending = $spending - $advertising[10]['cost'];
 				}
 				
 				
@@ -239,6 +228,7 @@ error_reporting(~0);
 				{
 					//print_r("entry lev is set with " . $_POST[intval($entryLev)]);
 					array_push($personArr, $_POST[intval($entryLev)]);
+					$spending = $spending - $personnel[0]['cost'];
 					
 				}
 				else
@@ -252,6 +242,7 @@ error_reporting(~0);
 				{
 					//print_r("manager in training is set with " . $_POST[intval($manTrain)]);
 					array_push($personArr, $_POST[intval($manTrain)]);
+					$spending = $spending - $personnel[1]['cost'];
 					
 				}
 				else
@@ -264,6 +255,7 @@ error_reporting(~0);
 				{
 					//print_r("experienced professional is set with " . $_POST[intval($expProf)]);
 					array_push($personArr, $_POST[intval($expProf)]);
+					$spending = $spending - $personnel[2]['cost'];
 					
 				}
 				else
@@ -303,12 +295,14 @@ error_reporting(~0);
 				
 				if(isset($_POST['researched']))
 				{
-					
+					$o = 0;
 					foreach ($_POST['researched'] as $item)
 					{
 						array_push($researchArr, $item);
+						$spending = $spending - $reSearch[$o]['cost'];
+						$o++;
 					}
-					
+					print_r($spending);
 					
 				}
 				//print_r("size of research array" . count($researchArr) );
@@ -320,10 +314,10 @@ error_reporting(~0);
 				//print_r("anything");]
 				
 				//add if hotel not in db else update
-				 $obj2->addDecisionsexistingTable($decisionsTableName, $gameNum ,$hotel, $periodNum, $arrDecisions, $personArr, $ATONumber, $roomRate, $researchArr, $adCount, $researchCount);
-				session_start();
-				$_SESSION['FIRST PERIOD'] = "false";
-				header("Location: /index.php");
+				 print_r($obj2->insertDecisions($gameNum ,$periodNum, $roomRate, $hotel,  $arrDecisions, $personArr, $ATONumber,  $researchArr));
+				
+				
+				//header("Location: ../index.php");
 			/*	if(isset($_SESSION['FIRST PERIOD']))
 				{
 					unset($_SESSION['FIRST PERIOD']);
@@ -352,11 +346,11 @@ error_reporting(~0);
     <title>Strategic Decisions</title>
 
     <!-- Bootstrap Core CSS -->
-    <link href="css/bootstrap.min.css" rel="stylesheet">
-	 <link href="css/grid.css" rel="stylesheet">
+    <link href="../css/bootstrap.min.css" rel="stylesheet">
+	 <link href="../css/grid.css" rel="stylesheet">
 
     <!-- Custom CSS -->
-    <link href="css/logo-nav.css" rel="stylesheet">
+    <link href="../css/logo-nav.css" rel="stylesheet">
 
     <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
@@ -818,7 +812,7 @@ function redirect(site) {
             <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
                 <ul class="nav navbar-nav">
                     <li>
-                        <a href="#"="a" onclick ="redirect('index.php')"> Home</a>
+                        <a href="#"="a" onclick ="redirect('../index.php')"> Home</a>
                     </li>
                     <li>
                         <a href="#"="a" onclick ="redirect('metrics.php')">Metrics</a>

@@ -293,8 +293,8 @@ class NewsController
 	function choosePeriod($game)
 	{
 		$mydatabase = new database(); 
-        $game = $mydatabase->getGame($game);
-		$news = $mydatabase->getAllNews_by_game($game['id']);
+        //$game = $mydatabase->getGame($game);
+		$news = $mydatabase->getAllNews_by_game($game);//$game['id']);
 		
 		$result = '<div class="table-responsive">
 			<h3>Choose a Period</h3><br />
@@ -378,7 +378,7 @@ class NewsController
 						//"<iframe width='560' height='315' src='https://www.youtube.com/embed/oavMtUWDBTM?list=FLlpvYpjrPP2VmA_-5xV3a0Q' frameborder='0' allowfullscreen></iframe>".
 						"<br /><br />".
 	
-						"<form action='/News/News.php' method='post'>".
+						"<form action='/views/News.php' method='post'>".
 							"<input name='button_returnBack' type = 'submit' value = 'Return back' class='btn btn-primary'/> ".
 							" <input name='button_commit' type = 'submit' value = 'Commit to DataBase' class='btn btn-primary'/>".
 						"</form>".

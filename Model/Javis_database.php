@@ -689,6 +689,7 @@ class database
         }
 
 		$secretAns = strtoupper($this->conn->real_escape_string($secretAns));
+		$secretAns = trim($secretAns);
 		$email = $this->conn->real_escape_string($email);
 		$id = $this->conn->real_escape_string($id);
 		
@@ -714,6 +715,7 @@ class database
         }
 		
 		$secretAns = strtoupper($this->conn->real_escape_string($secretAns));
+		$secretAns = trim($secretAns);
 		$email = $this->conn->real_escape_string($email);
 		$id = $this->conn->real_escape_string($id);
 		
@@ -782,12 +784,154 @@ class database
 			return "fail";
 		return "pass";
     }	
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//////////////SPRINT 666////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	public function getAllComments() 
+    {        
+		$r = $this->conn->query(sprintf("select * from student_comments;"));
+		$resArr = array();
+
+		while($result = $r->fetch_assoc())
+		{
+			$resArr[]  = $result ;
+		}
+        return $resArr;
+    }//1
 	
+	public function getCommentById($id) 
+    {        
+        $v = $this->conn->real_escape_string($id);
+        $r = $this->conn->query(sprintf("select * from student_comments where id = '%s';",$v));
+  
+        return $r->fetch_assoc();
+    }//2
 	
+	public function getCommentByGameAndPeriod($game,$period) 
+    {       
+		$gameStr = "";
+		$periodStr = "";
+		
+		if(isset($game) && $game != null)
+		{
+			if(count($game) > 0)
+			{
+				$gameStr = "( game = ".$game[0];
+				for($i = 1;$i< count($game);$i++)
+					$gameStr .= " or game = ".$game[$i];
+				$gameStr .= ")";
+			}
+			
+			if(count($game) > 0 && count($period) > 0)
+			{
+				$gameStr .= " and ";
+			}
+		}
+		
+		if(isset($period) && $period != null)
+		{
+			if(count($period) > 0)
+			{
+				$periodStr = "( period = ".$period[0];
+				for($i = 1;$i < count($period);$i++)
+					$periodStr .= " or period = ".$period[$i];
+				$periodStr .= ")";
+			}
+		}
+		
+
+        $v = $this->conn->real_escape_string($gameStr);
+		$v .= $this->conn->real_escape_string($periodStr);
+		
+
+		$q = sprintf("select * from student_comments where %s;",$v);
+		$r = $this->conn->query($q);//sprintf("select * from student_comments where ('%s');",$v));
+
+		
+		$resArr = array();
+		while($result = $r->fetch_assoc())
+		{
+			$resArr[]  = $result ;
+		}
+		
+        return $resArr; 
+    }//3
 	
+
+	
+	public function updateFeedback($id,$feedback)
+	{
+		$result = "";
+        if (!$this->conn) 
+        {
+			die("Connection failed: " . mysqli_connect_error());
+			$result = "fail";
+        }
+		
+        $sql = sprintf("UPDATE student_comments SET feedback='%s' WHERE id='%s'",$feedback,$id);
+
+
+		$this->conn->query($sql);
+				
+		
+		if($this->conn->affected_rows==0)
+			return "fail";
+		return "pass";
+    }//4
+	
+	function getHotelByGameID($gameID)
+	{
+		 $v = $this->conn->real_escape_string($gameID);
+         $r = $this->conn->query(sprintf("select * from hotel where game = '%s';",$v));
+  
+		$resArr = array();
+		while($result = $r->fetch_assoc())
+		{
+			$resArr[]  = $result ;
+		}
+		
+        return $resArr; 
+	}//5
+	function getStudentByHotel($HotelID)
+	{
+		 $v = $this->conn->real_escape_string($HotelID);
+         $r = $this->conn->query(sprintf("select * from student where hotel = '%s';",$v));
+  
+		$resArr = array();
+		while($result = $r->fetch_assoc())
+		{
+			$resArr[]  = $result ;
+		}
+		
+        return $resArr; 
+	}//6
+	
+	function getMarketShareByHotelAndPeriod($HotelID,$period)
+	{
+		$v = $this->conn->real_escape_string($HotelID);
+		$s = $this->conn->real_escape_string($period);
+		$r = $this->conn->query(sprintf("select * from market_share where hotel = '%s' and period = '%s';",$v,$s));
+  
+		return $r->fetch_assoc();
+	}//7
+	
+	public function getCommentByHotelAndPeriod($hotel,$period) 
+    {        
+        $v = $this->conn->real_escape_string($hotel);
+		$s = $this->conn->real_escape_string($period);
+        $r = $this->conn->query(sprintf("select * from student_comments where hotel = '%s' and period = '%s';",$v,$s));
+  
+  	/*	if($this->conn->affected_rows==0)
+			return ($v.' : '.$s.' : '."fail<br />");
+		return ("pass");*/
+  
+  
+        return $r->fetch_assoc();
+    }//2
 	
 	
 }
+
 
 
 ?>

@@ -2,8 +2,8 @@
 
 ini_set('display_errors', 1);
 error_reporting(~0);
-include("connection.php");
-require 'Model/database.php';
+include("../Model/connection.php");
+require '../Model/database.php';
 	
 	////
 session_start();

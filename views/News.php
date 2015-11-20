@@ -290,7 +290,7 @@ $newsController = new NewsController();
 		}
 		else
 		{
-			header('Location: /login.php');
+			header('Location: /views/login.php');
 			exit;
 		}
 		//$value = $newsController->chooseGame();

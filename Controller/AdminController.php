@@ -15,11 +15,12 @@ class AdminController
 							"<div class='panel-body' align='center'>".
 
 								"<h2>User Accounts Management</h2>".
-								"<a href='http://marketsim-dev.cis.fiu.edu/admin/ManagePage.php?addAdminUser=Add+Admistrative+User' class='btn btn-primary'>Add Admistrative User</a>".
-								"<a href='http://marketsim-dev.cis.fiu.edu/admin/ManagePage.php?addBotUser=Add+Bot+User' class='btn btn-primary'>Add Bot User</a>".
+								"<a href='http://marketsim-dev.cis.fiu.edu/views/ManagePage.php?addAdminUser=Add+Admistrative+User' class='btn btn-primary'>Add Admistrative User</a>".
+								"<a href='http://marketsim-dev.cis.fiu.edu/views/ManagePage.php?addBotUser=Add+Bot+User' class='btn btn-primary'>Add Bot User</a>".
 								//"<a href='http://marketsim-dev.cis.fiu.edu/admin/ManagePage.php?addBotUser=Add+Bot+User&textbox_bot_id=&textbox_bot_fname=&textbox_bot_lname=&textbox_bot_email=' class='btn btn-primary'>Add Bot User</a>".
-								"<a href='http://marketsim-dev.cis.fiu.edu/admin/ManagePage.php?viewAllGames=View+All+Games' class='btn btn-primary'>View All Games</a>".
-								"<a href='http://marketsim-dev.cis.fiu.edu/admin/ManagePage.php?viewAllUsers=View+All+Users' class='btn btn-primary'>View All Users</a>".
+								"<a href='http://marketsim-dev.cis.fiu.edu/views/ManagePage.php?viewAllGames=View+All+Games' class='btn btn-primary'>View All Games</a>".
+								"<a href='http://marketsim-dev.cis.fiu.edu/views/ManagePage.php?viewAllUsers=View+All+Users' class='btn btn-primary'>View All Users</a>".
+								//"<a href='http://marketsim-dev.cis.fiu.edu/admin/ManagePage.php?viewAllUsers=View+All+Users' class='btn btn-primary'>View All Users</a>".
 							"</div>".
 							"<div class='' align='center'>".
 							"<div class='panel-footer clearfix' style='width: 1060px' >".
@@ -52,9 +53,7 @@ class AdminController
 			"<h3>Secret Answer</h3>".
 			"<input type = 'Text' name = 'textbox_secretAnswer'  pattern='.{1,}' placeholder='marketsim-dev.cis.fiu.edu'>".
 			"<br />".
-			"<br />"."<br />".
-			//"<a href='http://marketsim-dev.cis.fiu.edu/admin%20shit/adminUsers.php?textbox_fname=&textbox_lname=&textbox_email=&textbox_password1=&textbox_password2=&textbox_secretQuestion=&textbox_secretAnswer=&button_addAdmin=Create+Admistrative+Account' class='btn btn-primary'>View All Users</a>".
-						
+			"<br />"."<br />".					
 			"<input name='button_addAdmin' type = 'submit' value = 'Create Admistrative Account' class='btn btn-primary'/>".
 			"</div>"
 			;
@@ -375,8 +374,7 @@ class AdminController
 			."<td>".$temp["section"]."</td>"
 			."<td>".$temp["schedule"]."</td>"
 			."<td>".$temp["isActive"]."</td>"
-			//."<td> <a href='http://marketsim-dev.cis.fiu.edu/admin%20shit/adminUsers.php?viewUsersForGame=true&game=".$temp["id"]."'>Users</a></td>"
-			."<td> <a href='http://marketsim-dev.cis.fiu.edu/admin/ManagePage.php?viewUsersForGame=true&game=".$temp["id"]."'>Users</a></td>"
+			."<td> <a href='http://marketsim-dev.cis.fiu.edu/views/ManagePage.php?viewUsersForGame=true&game=".$temp["id"]."'>Users</a></td>"
 			."</tr>"
 			."</tbody>";
 		}

@@ -74,10 +74,11 @@ class AccountController
 				"<br />".
 				"<br />".
 				//"<input name='button_ChangeMyRecovery' type = 'submit' value = 'Change My Recovery Quest/Ans' class='btn btn-primary'/>".
-				"<a href='http://marketsim-dev.cis.fiu.edu/Account%20Manage/accountManage.php?button_ChangeMyRecovery=Change+My+Recovery+Quest%2FAns' class='btn btn-primary'>Change My Recovery Quest/Ans</a>".
+				//"<a href='http://marketsim-dev.cis.fiu.edu/Account%20Manage/accountManage.php?button_ChangeMyRecovery=Change+My+Recovery+Quest%2FAns' class='btn btn-primary'>Change My Recovery Quest/Ans</a>".
+				"<a href='http://marketsim-dev.cis.fiu.edu/views/accountManage.php?button_ChangeMyRecovery=Change+My+Recovery+Quest%2FAns' class='btn btn-primary'>Change My Recovery Quest/Ans</a>".
 				" ".
 				//"<input name='button_ChangeMyPassword' type = 'submit' value = 'Change My Password' class='btn btn-primary'/> ".
-				"<a href='http://marketsim-dev.cis.fiu.edu/Account%20Manage/accountManage.php?button_ChangeMyPassword=Change+My+Password' class='btn btn-primary'>Change My Password</a>";
+				"<a href='http://marketsim-dev.cis.fiu.edu/views/accountManage.php?button_ChangeMyPassword=Change+My+Password' class='btn btn-primary'>Change My Password</a>";
 			
 			
 			

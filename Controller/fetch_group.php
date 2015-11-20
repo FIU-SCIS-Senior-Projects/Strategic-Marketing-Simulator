@@ -1,5 +1,7 @@
 <?php
-include("connection.php");
+
+include("../Model/connection.php");
+include("../Model/connection.php");
 ini_set('display_errors', 1);
 error_reporting(~0);
 
@@ -30,33 +32,4 @@ $query = mysqli_query($con, $sql);
 
 ?>
 
-<script src="jquery-1.9.0.min.js"></script>
-<script>
-/*$(document).ready(function(){
-
-
-$("select#drop2").change(function(){
-
-	var group_id = $("select#drop2 option:selected").attr('value');
-    //alert(group_id);
-	if (group_id.length > 0 ) { 
-	 $.ajax({
-			type: "POST",
-			url: "fetch_students.php",
-			data: "group_id="+group_id,
-			cache: false,
-			beforeSend: function () { 
-				$('#students').html('<img src="/srv/marketsim/www/loader.gif" alt="" width="24" height="24">');
-			},
-			success: function(html) {    
-				$("#students").html( html );
-				alert(html);
-			}
-		});
-	} else {
-		$("#students").html( "" );
-	}
-});
-
-});*/
-</script>
+<script src="../js/jquery-1.9.0.min.js"></script>

@@ -19,6 +19,8 @@ session_start();
 		$obj = new periodController();
 		$obj->commit($comments, $email);
 	}
+	
+	
 
 
 	

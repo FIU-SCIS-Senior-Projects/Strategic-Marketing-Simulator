@@ -18,21 +18,21 @@ To items: 		Update database with new values for strategic decisions
 
 ini_set('display_errors', 1);
 error_reporting(~0);
-	require 'Model/database.php';
+	require '../Model/database.php';
 	$stuArr = array();
 	$stuGroup = array();
 	session_start();
 	if (!isset($_SESSION['admin login'])) 
 	{
-		header("Location: /stratDecisions.php");
+		//header("Location: /stratDecisions.php");
 	}
 	else if (!isset($_SESSION['login user'])) 
 	{
-		header("Location: /login.php");
+		//header("Location: /login.php");
 	}
 	
-	else
-	{
+	//else
+	//{
 		echo "<div style = 'text-align: right; padding-right: 15px'>".$_SESSION['admin login'] . " is not you? login 
 			<a href='/login.php'> here</a>
 		</div>";
@@ -41,20 +41,20 @@ error_reporting(~0);
 		
 		
 		
-		$email = $_SESSION['login user'];
+		//$email = $_SESSION['login user'];
 		$obj = new database();
-		$stuArr = $obj->getStudent($email);
-		$stuGroup = $obj->getGroup($stuArr['hotel']);
+	//	$stuArr = $obj->getStudent($email);
+	//	$stuGroup = $obj->getGroup($stuArr['hotel']);
 		
 		
 		
-		$groupType = $stuGroup['type'];
-		$gameNum = $stuGroup['game'];
+	//	$groupType = $stuGroup['type'];
+	//	$gameNum = $stuGroup['game'];
 		
 		
 		
-		$allGroup = $obj-> getGroupsforGame($stuGroup['game']);
-		$stuLoc = $obj-> getLocation($stuGroup['location']);
+	//	$allGroup = $obj-> getGroupsforGame($stuGroup['game']);
+	//	$stuLoc = $obj-> getLocation($stuGroup['location']);
 		
 		$personnel = $obj->getPersonnel();
 		
@@ -64,12 +64,14 @@ error_reporting(~0);
 		
 		
 		
+		
 		/*
 		advertising block - admin manage page to change values in database
 		
 		*/
 		$advert = $obj->getAdvertising();
 		$dir_mark = $advert[0]['cost'];
+		
 		$pub_rel = $advert[1]['cost'];
 		$print = $advert[2]['cost'];
 		$billBoard = $advert[3]['cost'];
@@ -128,8 +130,8 @@ error_reporting(~0);
 		
 		
 		
-		$studentGroup = $stuGroup['name']; // used for check on Market Research so ones own group isn't displayed
-		$groupBal  = $stuGroup['balance']; 
+		//$studentGroup = $stuGroup['name']; // used for check on Market Research so ones own group isn't displayed
+	//	$groupBal  = $stuGroup['balance']; 
 		//$groupBal = number_format($groupBal);  
 		
 		
@@ -236,11 +238,11 @@ error_reporting(~0);
 			
 			
 			
-				header("Location: stratDecisionsMan.php");
+				header("Location: ManagePage.php");
 		
 		}
 		
-	}
+	//}
  ?>
 
 
@@ -257,11 +259,11 @@ error_reporting(~0);
     <title>Strategic Decisions</title>
 
     <!-- Bootstrap Core CSS -->
-    <link href="css/bootstrap.min.css" rel="stylesheet">
-	 <link href="css/grid.css" rel="stylesheet">
+    <link href="../css/bootstrap.min.css" rel="stylesheet">
+	 <link href="../css/grid.css" rel="stylesheet">
 
     <!-- Custom CSS -->
-    <link href="css/logo-nav.css" rel="stylesheet">
+    <link href="../css/logo-nav.css" rel="stylesheet">
 
     <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
@@ -333,7 +335,7 @@ function redirect(site) {
             <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
                 <ul class="nav navbar-nav">
                     <li>
-                        <a href="#"="a" onclick ="redirect('index.php')"> Home</a>
+                        <a href="#"="a" onclick ="redirect('../index.php')"> Home</a>
                     </li>
                     <li>
                         <a href="#"="a" onclick ="redirect('metrics.php')">Metrics</a>
@@ -342,10 +344,10 @@ function redirect(site) {
                          <a href="#"="a" onclick ="redirect('stratDecisionsMan.php')">Strategic Decisions</a>
                     </li>
 					<li>
-                        <a href="#"="a" onclick ="redirect('/admin/ManagePage.php')"> Manage</a>
+                        <a href="#"="a" onclick ="redirect('ManagePage.php')"> Manage</a>
                     </li>
                     <li>
-                        <a href="#"="a" onclick ="redirect('/News/News.php')">News</a>
+                        <a href="#"="a" onclick ="redirect('News.php')">News</a>
                     </li>
                     <li>
                          <a href="#"="a" onclick ="redirect('login.php')">Login</a>

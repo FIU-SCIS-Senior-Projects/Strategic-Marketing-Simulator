@@ -32,13 +32,13 @@
             <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1" style='margin:auto; width:66%;'>
                 <ul class="nav navbar-nav">
 					<li> <a href="/index.php">Home</a></li>
-					<li> <a href="/metrics.php">Metrics</a></li>
-					<!--<li> <a href="/stratDecisions.php">Strategic Decisions</a></li>-->
-					<li> <a href="/stratDecisionsMan.php">Strategic Decisions</a></li>
-					<li> <a href="/admin/ManagePage.php">Manage</a></li>
-					<li> <a href="/News/News.php">News</a></li>
+					<li> <a href="/views/stratDecisionsMan.php">Strategic Decisions</a></li>
+					<li> <a href="/views/ManagePage.php">Manage</a></li>
+					<!--<li> <a href="/News/News.php">News</a></li> -->
+					<li> <a href="/views/News.php">News</a></li>
 					<li> <a href="/signout.php">Sign Out</a></li>
-					<li> <a href="/Account Manage/accountManage.php" style="float: right;" >My Account</a></li>
+					<li> <a href="/views/accountManage.php" style="float: right;" >My Account</a></li>
+					<li> <a href="/views/reportingPage.php" >Reporting</a></li>
                 </ul>
             </div>
             <!-- /.navbar-collapse -->

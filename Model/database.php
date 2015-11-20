@@ -1,6 +1,7 @@
 <?php
 
 
+
 require ("/srv/marketsim/www/Entities/StudentEntity.php");
 
 
@@ -412,7 +413,7 @@ class database
 	function getGroupsforGame($id)
 	{
 		
-		$r = $this->conn->query(sprintf("select distinct name, l.type from game g, location l, hotel h where '%s' = h.game and h.location = l.id;", $id));
+		$r = $this->conn->query(sprintf("select distinct name,h.location, h.type as hotel_type,  h.id, l.type from game g, location l, hotel h where '%s' = h.game and h.location = l.id;", $id));
 		$resArr = array();				//select distinct h.id as id, h.name, l.type as type1, h.type as type2 from game g, location l, hotel h where h.game =" .$game_id . " and h.location = l.id
 		
 		while($result = $r->fetch_assoc())
@@ -430,6 +431,7 @@ class database
 	function getadvertisingNameAndPrice($id)
 	{
 		$qry = "select type, cost from advertising where id = " . $id;
+		//return $qry;
 		$r = $this->conn->query($qry);
 		
 		///////////this was added for a test/////////////
@@ -623,10 +625,10 @@ class database
 
 	
 	
-	function getStudentDecisions($name, $hotel)
+	function getStudentDecisions($game,$period, $hotel)
 	{
 	
-		$qry = "Select * from " . $name . " where hotel='". $hotel ."';"; 
+		$qry = "Select * from strat_decions where  where hotel=". $hotel . "and gameID=" . $game . " and periodNum=" .$period. ";"; 
         
         $r = $this->conn->query($qry);
 		if($r)
@@ -1278,7 +1280,7 @@ class database
 	
 	function getLeaderboardTable($game)
 	{
-		$qry = "Select distinct h.name, h.type, l.type as ltype, h.revenue, h.purpose from hotel h, location l, game g where h.game= " . $game . " and l.id=h.location";
+		$qry = "Select distinct h.name, h.type, l.type as ltype, h.revenue, h.purpose from hotel h, location l, game g where h.game= " . $game . " and l.id=h.location order by h.revenue";
 		$r = $this->conn->query($qry);
 		$arr = array();
 		while($result = $r->fetch_assoc())
@@ -1317,9 +1319,10 @@ class database
     
 	}
 	
-	function getPeriodResearch($gamePeriod, $group)
+	function getPeriodResearch($game, $period, $hotel)
 	{
-		$qry = "Select research1,  research2,  research2, research4, research5 from " . $gamePeriod . " where hotel =" . $group . ";" ;
+		$qry = "Select research1,  research2,  research2, research4 from strat_decisions where gameID=  " . $game . " and periodNum=" . $period. " and hotel=".$hotel.";" ;
+		//return $qry;
 		$r = $this->conn->query($qry);
 		$arr = array();
 		if($r)
@@ -1353,8 +1356,8 @@ class database
 	
 	{
 		$result = "";
-		$sql = sprintf("UPDATE game SET periodNum='%s' WHERE id='%s'",$period,$game);
-
+		$sql = sprintf("UPDATE game SET periodNum='%s' WHERE id='%s'",$period+1,$game);
+		//return $sql;
 		//return $sql;
 		//exit;
         if (mysqli_query($this->conn, $sql))
@@ -1556,9 +1559,491 @@ class database
 			return "fail";
 		return "pass";
     }	
+	/*//////////////////////////////////////////////////////////////////////////////////////////////////////////*/
+	///////////////////////////////////////////////////sprint 6///////////////////////////////////////////////////
+	/*///////////////////////////////////////////////////////////////////////////////////////////////////////////*/
+	
+	function insertdecisions($gameNum ,$periodNum, $roomRate, $hotel,  $arrDecisions, $personArr, $OTA,  $research)
+	{
+		$qry = "select * From strat_decisions where gameID= " .$gameNum." and periodNum=".$periodNum." and hotel=" . $hotel.";";
+	
+		$r = $this->conn->query($qry);
+		$resArr = array();
+
+		while($result = $r->fetch_assoc())
+		{
+			$resArr[]  = $result ;
+		}
+     
+		if (count($resArr)!=0) 
+			{		
+			$query = "REPLACE ";
+			}
+			else
+			{
+			$query = "INSERT ";
+			}
+			
+	
+		$query .= "into strat_decisions (gameID, periodNum, aveRate, hotel, adv1, adv2, adv3, adv4, adv5, adv6, adv7, adv8, adv9, adv10, adv11, ";
+		$query.= "P1, P2, P3, OTA, research1, research2, research3, research4) VALUES ("	;
+			
+			
+			
+			$query.= $gameNum . ", " .$periodNum. ", " .$roomRate. ", ".$hotel . ", "; 
+			
+			for ($q = 0; $q < count($arrDecisions); $q++ )
+			{
+				$query.= $arrDecisions[$q] . ", ";
+			}
+			for(;$q < 11; $q++)
+			{
+				$query.= "0, ";
+			}
+									
+			for($t = 0; $t < count($personArr); $t++)
+			{
+				$query.= $personArr[$t] . ", ";
+			}
+			for(;$t < 2; $t++)
+			{
+				$query.= "0, ";
+			}
+			
+			$query.= $OTA . ", ";
+				
+			
+			for($p = 0; $p < count($research); $p++)
+			{
+				$query.= "'".$research[$p] . "', ";
+			}
+			
+			for( ;$p < 4; $p++ )
+			{
+				if(($p+1) < 4)
+				{
+					$query.= "NULL, ";
+					
+				}
+				else
+				{
+					$query.= "NULL); ";  //Fatal error: Allowed memory size of 134217728 bytes exhausted 
+				}
+				
+			}
+			
+			
+			
+			/*INSERT INTO table (id, name, age) VALUES(1, "A", 19) ON DUPLICATE KEY UPDATE    
+	name=VALUES(name), age=VALUES(age)*/
+			//return $query;
+			
+			if (mysqli_query($this->conn, $query)) 
+			{
+			return "Decisions accepted";
+			} 
+			else
+			{
+			return "Something went wrong";
+			}
+			
+			return $query;
+	}
+	
+	function getStudentDecisions2($game, $period, $hotel)
+	{
+		$qry = "select * from strat_decisions where gameID =" . $game . " and periodNum=" . $period. " and hotel =".$hotel.";"; 
+		//return $qry;
+		$r = $this->conn->query($qry);
+		$resArr = array();
+		if($r)
+		{
+			while($result = $r->fetch_assoc())
+			{	
+				$resArr[]  = $result ;
+			}
+			return $resArr;
+		}
+		else 
+		{
+			return false;
+		}
+		
+	}
+	
+	function getMarketShare($game, $period)
+	{
+		$qry = "select * from market_share where gameID =" . $game . " and period=" . $period.";"; 
+		//return $qry;
+		$r = $this->conn->query($qry);
+		$resArr = array();
+		if($r)
+		{
+			while($result = $r->fetch_assoc())
+			{	
+				$resArr[]  = $result ;
+			}
+			return $resArr;
+		}
+		else 
+		{
+			return false;
+		}
+		
+	}
+	
+	function getMarketShareforGroup($game, $period, $hotel)
+	{
+		$qry = "select * from market_share where gameID =" . $game . " and period=" . $period." and hotel =".$hotel.";"; 
+		//return $qry;
+		$r = $this->conn->query($qry);
+		$resArr = array();
+		if($r)
+		{
+			while($result = $r->fetch_assoc())
+			{	
+				$resArr[]  = $result ;
+			}
+			return $resArr;
+		}
+		else 
+		{
+			return false;
+		}
+		
+	}
+	
+	function getMarketchart($game, $period, $hotel)
+	{
+		$qry = "select * from market_share where gameID =" . $game . " and period=" . $period."and hotel =".$hotel.";"; 
+		//return $qry;
+		$r = $this->conn->query($qry);
+		$resArr = array();
+		if($r)
+		{
+			while($result = $r->fetch_assoc())
+			{	
+				$resArr[]  = $result ;
+			}
+			return $resArr;
+		}
+		else 
+		{
+			return false;
+		}
+		
+	}
+	
+	function gethotelname($id)
+	{
+	$qry = "select name from hotel where id =". $id.";"; 
+		//return $qry;
+		$r = $this->conn->query($qry);
+		$resArr = array();
+		if($r)
+		{
+			while($result = $r->fetch_assoc())
+			{	
+				$resArr[]  = $result ;
+			}
+			return $resArr;
+		}
+		else 
+		{
+			return false;
+		}
+		
+	}
+	
+	function getAdvertFromStrats($game, $period, $hotel)
+	{
+		$qry = "select * from strat_decisions where hotel=";
+		$qry.= $hotel . " and gameid=". $game . " and periodNum=" . $period .";"; 
+		//return $qry;
+		$r = $this->conn->query($qry);
+		$resArr = array();
+		if($r)
+		{
+			while($result = $r->fetch_assoc())
+			{	
+				$resArr[]  = $result ;
+			}
+			return $resArr;
+		}
+		else 
+		{
+			return false;
+		}
+		
+	}
 	
 	
+	// this function returns an array of decimals representing the decisions impact on a market for a group during one period
+	public function getDecisionsImpact($game,$period, $group) // ok
+	{
 	
+		$P_Impacts = database::getPersonnel();
+		$allAdvert = database::getAdvertising();
+		$newEffect = database::getNewsEffects($game, $period);
+	
+	//*getting advertising impact*//
+		$advertQRY = "select adv1, adv2, adv3, adv4, adv5, adv6, adv7, adv8, adv9, adv10, adv11 from strat_decisions where hotel=";
+		$advertQRY.= $group. " and gameID = " . $game . " and periodNum=" . $period . ";";
+		//return $advertQRY;
+		
+		$r = $this->conn->query($advertQRY);
+		
+		$advertising = array();
+		$decisions = array();
+		
+		if($r)
+		{
+			while($result = $r->fetch_assoc())
+			{	
+				foreach($result as $res)
+				{
+					if($res==0)
+					{
+						break;
+					}
+					array_push($advertising, $res); // this is the advertising that a group selected
+				}
+				
+							
+			}
+								
+			 // temp array only used to get impact for each advertising the group selected.
+			
+			foreach($advertising as $ad)
+			{
+					//$temp = array(floatval($allAdvert[$ad-1]['impact']));
+					
+				array_push($decisions,  floatval($allAdvert[$ad-1]['impact']) );
+			}
+			
+			//*getting advertising impact ---  Finished*//
+			
+		}
+		else 
+		{
+			return false;
+		}
+		
+		//**getting personnel impact**//
+		
+		$P_QRY = "select P1, P2, P3 from strat_decisions where hotel=";
+		$P_QRY.= $group. " and gameID = " . $game . " and periodNum=" . $period . ";";
+		//return $P_QRY;
+		
+		$rr = $this->conn->query($P_QRY);
+		$selectPersonnel = array();
+		
+		if($rr)
+		{
+		$count = 0;
+			while($result = $rr->fetch_assoc())
+			{	
+				foreach($result as $res)
+				{
+					if(intval($res) != 0)
+					{
+					
+						array_push($decisions, intval($res) * floatval($P_Impacts[$count]['impact'])); // this is the advertising that a group selected
+						
+					}
+					$count++;
+				}
+				
+							
+			}
+					//**getting personnel -- end**//
+		}
+		else
+		{
+			return false;
+		}
+			
+		//var_dump($decisions);
+		return $decisions; // all the decision impact for a group
+		
+		
+	
+	}
+	
+	public function getNewsEffects($game, $period)
+	{
+		$qry = "select p.effect, p.hotel_type, p.hotel_location from news_parameters p, news n where n.id =p.news_id and n.game=";
+		$qry.= $game . " and n.periodNum = " . $period .";";
+		//return $qry;
+		
+		$r = $this->conn->query($qry);
+		$res = array();
+		if($r)
+		{
+			while($result = $r->fetch_assoc())
+			{	
+				$res[]  = $result ;
+			}
+			return $res;
+			
+		}
+		else 
+		{
+			return "didn't work";
+		}
+	
+	}
+	
+	function getGroupsIDforGame($game)
+	{
+		
+		$r = $this->conn->query($str =sprintf("select distinct h.id, h.name, h.location, h.type as hotel_type from game g, location l, hotel h where '%s' = h.game and h.location = l.id;", $game));
+		//return $str;
+		$resArr = array();				//select distinct h.id as id, h.name, l.type as type1, h.type as type2 from game g, location l, hotel h where h.game =" .$game_id . " and h.location = l.id
+		if($r)
+		{
+		
+			while($result = $r->fetch_assoc())
+			{
+				$resArr[]  = $result ;
+			
+			}
+		
+			return $resArr;
+		}
+		else
+		{
+			return false;
+		}
+	}
+	
+	function getTotalRooms()
+	{
+		
+		$r = $this->conn->query("select * from totalrooms;");
+		//return $str;
+		$resArr = array();				//select distinct h.id as id, h.name, l.type as type1, h.type as type2 from game g, location l, hotel h where h.game =" .$game_id . " and h.location = l.id
+		if($r)
+		{
+		
+			while($result = $r->fetch_assoc())
+			{
+				$resArr[]  = $result ;
+			
+			}
+		
+			return $resArr;
+		}
+		else
+		{
+			return false;
+		}
+	}
+	public  function  Alpha($game, $period)
+	{
+	
+		$r = $this->conn->query("select hotel, aveRate from strat_decisions where gameID=" . $game." and periodNum=".$period.";");
+		$resArr = array();				//select distinct h.id as id, h.name, l.type as type1, h.type as type2 from game g, location l, hotel h where h.game =" .$game_id . " and h.location = l.id
+		if($r)
+		{
+		
+			while($result = $r->fetch_assoc())
+			{
+				$resArr[]  = $result ;
+			
+			}
+		
+			return $resArr;
+		}
+		else
+		{
+			return false;
+		}
+	}
+	public  function  Epsilon($game, $period, $group)
+	{
+		//return "select hotel, OTA from strat_decisions where gameID=" . $game." and periodNum=".$period." and hotel =".$group.";";
+		$r = $this->conn->query("select hotel, OTA from strat_decisions where gameID=" . $game." and periodNum=".$period." and hotel =".$group.";");
+		$resArr = array();				//select distinct h.id as id, h.name, l.type as type1, h.type as type2 from game g, location l, hotel h where h.game =" .$game_id . " and h.location = l.id
+		if($r)
+		{
+		
+			while($result = $r->fetch_assoc())
+			{
+				$resArr[]  = $result ;
+			
+			}
+		
+			return $resArr;
+		}
+		else
+		{
+			return false;
+		}
+	}
+	
+	public  function  getGroupComments($game, $period, $group)
+	{
+		//return "select hotel, OTA from strat_decisions where gameID=" . $game." and periodNum=".$period." and hotel =".$group.";";
+		$r = $this->conn->query("select comments from student_comments where gameID=" . $game." and periodNum=".$period." and hotel =".$group.";");
+		$resArr = array();				//select distinct h.id as id, h.name, l.type as type1, h.type as type2 from game g, location l, hotel h where h.game =" .$game_id . " and h.location = l.id
+		if($r)
+		{
+		
+			while($result = $r->fetch_assoc())
+			{
+				$resArr[]  = $result ;
+			
+			}
+		
+			return $resArr;
+		}
+		else
+		{
+			return false;
+		}
+	}
+	
+	//insertBeta function adds a record to the marketshare table
+	
+	public function insertBeta($game, $period,$theta, $BETA_J )
+	{
+	//var_dump($BETA_J);exit;
+		$qry = "insert into market_share (gameid, period, hotel, roomsSold, groupSold) values (" . $game . ", " .
+		$period . ", " . $BETA_J['group'] . ", " 
+		. $theta . ", "
+		. $BETA_J['BETA_J'] . " );";
+		//return $qry;
+	
+		if (mysqli_query($this->conn, $qry)) 
+			{
+				return "pass";
+			} 
+		else
+		{
+			return "fail";
+			
+		}
+	}
+	
+	
+	//insert revenue for a group for end of period
+	
+	public function insertrevenue($game, $period, $delta)
+	{
+		$qry = "insert into revenue (game, period, hotel, revenue) values (" . $game . ", " . $period . ", " . $delta['group'] . ", ". $delta['DELTA'] . " );";
+		//return $qry;
+	
+		if (mysqli_query($this->conn, $qry)) 
+			{
+				return "pass";
+			} 
+		else
+		{
+			return "fail";
+			
+		}
+	}
 }
 
 	

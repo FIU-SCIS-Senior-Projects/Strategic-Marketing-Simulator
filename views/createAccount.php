@@ -18,7 +18,7 @@
 <br />
 
 	<h1 style ="color:blue">Strategic Marketing Simulator</h1> 
-	<div class =""><form action="validate.php" method="post" style="height: 240px; width: 269px"><!--
+	<div class =""><form action="../Controller/newAccountController.php" method="post" style="height: 240px; width: 269px"><!--
         <input height"31" name="image1" src="/Images/Title.png" type="image" width="666" />--><br />
 		<div class="container">
 			<h2>Create a new account</h2>
@@ -85,7 +85,7 @@
 	var pwd2 = $('#pwd2').val();
 	var email = $('#email').val();
 	
-	$.post('validate.php',{postfname:fname,postlname:lname, postPID:PID, postpwd:pwd,postpwd2:pwd2, postemail:email},  
+	$.post('newAccountController.php',{postfname:fname,postlname:lname, postPID:PID, postpwd:pwd,postpwd2:pwd2, postemail:email},  
 	
 		function(data) 
 		{

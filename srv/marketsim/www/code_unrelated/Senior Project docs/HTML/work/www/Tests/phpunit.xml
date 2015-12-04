@@ -1,6 +1,0 @@
-<phpunit>
-    <listeners>
-        <listener class="ResultPrinterListener" file="./ResultPrinterListener.php"></listener>
-    </listeners>
-</phpunit>
-

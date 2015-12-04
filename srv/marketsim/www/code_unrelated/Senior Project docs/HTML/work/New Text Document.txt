@@ -1,1 +1,0 @@
-sudo tail -n 1 /var/log/apache2/marketsim-error.log

@@ -1,0 +1,60 @@
+
+
+PHPUnit 4.8.9 by Sebastian Bergmann and contributors.
+
+Runtime:	PHP 5.5.9-1ubuntu4.11
+Configuration:	/srv/marketsim/www/Tests/phpunit.xml
+
+..................F................
+
+Time: 310 ms, Memory: 11.75Mb
+
+There was 1 failure:
+
+1) databaseTest::test_updateStudentHotelValid
+Failed asserting that true matches expected false.
+
+/srv/marketsim/www/Tests/databaseTest.php:237
+
+FAILURES!
+Tests: 35, Assertions: 35, Failures: 1.
+
+
+ --- database --- 
+
+  ok   - databaseTest::test__constructInvalidPar
+  ok   - databaseTest::test__construcValidPar
+  ok   - databaseTest::test_searchForStudentsFound
+  ok   - databaseTest::test_searchForStudentsNotFound
+  ok   - databaseTest::test_getStudentFound
+  ok   - databaseTest::test_getStudentNotFound
+  ok   - databaseTest::test_addStudent
+  ok   - databaseTest::test_genPass
+  ok   - databaseTest::test_updateStudentPassword
+  ok   - databaseTest::test_updateStudentPasswordInValid
+  ok   - databaseTest::test_addGameValid
+  ok   - databaseTest::test_addGameinValid
+  ok   - databaseTest::test_updateAdminPasswordValid
+  ok   - databaseTest::test_updateAdminPasswordinValid
+  ok   - databaseTest::test_setStudentActiveValid
+  ok   - databaseTest::test_setStudentActiveinValid
+  ok   - databaseTest::test_AdminActiveValid
+  ok   - databaseTest::test_AdminActiveinValid
+  ok - databaseTest::test_updateStudentHotelValid
+  ok   - databaseTest::test_updateStudentHotelInValid
+  ok   - databaseTest::test_getGameValid
+  ok   - databaseTest::test_getGameinValid
+  ok   - databaseTest::test_getGroupValid
+  ok   - databaseTest::test_getGroupinValid
+  ok   - databaseTest::test_getGameByCourseValid
+  ok   - databaseTest::test_getGameByCourseinValid
+  ok   - databaseTest::test_getLocationValid
+  ok   - databaseTest::test_getLocationinValid
+  ok   - databaseTest::test_getAllGames
+  ok   - databaseTest::test_getAdvertisingValid
+  ok   - databaseTest::test_newHotelValid
+  ok   - databaseTest::test_SearchHotelsValid
+  ok   - databaseTest::test_SearchHotelsInValid
+  ok   - databaseTest::test_getGroupsForGameValid
+  ok   - databaseTest::test_getGroupsForGameinValid
+

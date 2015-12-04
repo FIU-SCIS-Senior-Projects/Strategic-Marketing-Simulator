@@ -1,0 +1,5 @@
+sudo tail -n 1 /var/log/apache2/marketsim-error.log
+
+
+
+Mingle: https://fiu-scis-seniorproject.mingle.thoughtworks.com/projects/strategic_marketing_simulator_/overview

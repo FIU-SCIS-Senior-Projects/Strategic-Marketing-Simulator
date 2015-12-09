@@ -20,9 +20,14 @@ error_reporting(~0);
 	$stuArr = array();
 	$stuGroup = array();
 	session_start();
-	if (!isset($_SESSION['login user'])) 
+	
+	if (isset($_SESSION['admin login'])) 
 	{
-		header("Location: /login.php");
+		header("Location: /views/stratDecisionsMan.php");
+	}
+	else if (!isset($_SESSION['login user'])) 
+	{
+		header("Location: /views/login.php");
 	}
 	else
 	{
@@ -314,10 +319,10 @@ error_reporting(~0);
 				//print_r("anything");]
 				
 				//add if hotel not in db else update
-				 print_r($obj2->insertDecisions($gameNum ,$periodNum, $roomRate, $hotel,  $arrDecisions, $personArr, $ATONumber,  $researchArr));
+				 $obj2->insertDecisions($gameNum ,$periodNum, $roomRate, $hotel,  $arrDecisions, $personArr, $ATONumber,  $researchArr);
 				
 				
-				//header("Location: ../index.php");
+				header("Location: ../index.php");
 			/*	if(isset($_SESSION['FIRST PERIOD']))
 				{
 					unset($_SESSION['FIRST PERIOD']);
@@ -775,7 +780,7 @@ function redirect(site) {
 		{
 			
 			var y = parseInt($('#Group_Balance').html().replace("$",""));
-			$("#Group_Balance").html("$" + (y + res)).css('color','green') ;
+			$("#Group_Balance").html("$" + (y +res)).css('color','green') ;
 			//alert(id + " is not checked");
 	
 		}
@@ -829,7 +834,7 @@ function redirect(site) {
                          <a href="/views/accountManage.php"="a" onclick ="redirect('accountManage.php')">My Account</a>
                     </li>					
                     <li>
-                         <a href="#"="a" onclick ="redirect('signout.php')">Sign Out</a>
+                         <a href="/signout.php"="a" onclick ="redirect('signout.php')">Sign Out</a>
                     </li>
 					
                 </ul>
@@ -968,6 +973,7 @@ function redirect(site) {
 			<div class="col-sm-2" style="" ><h3>Market Research</h3>
 			
 	<?php	echo "<p = id = 'reasearchCost' name ='". $research ."'>Research other groups at a cost of $". $research . ":</p>";		
+				//var_dump($allGroup);
 				$count = 1;
 				foreach($allGroup as $group) {
 					
@@ -976,7 +982,7 @@ function redirect(site) {
 				
 	
 				<div class="checkbox"  > 
-					<label><input id = "<?php echo str_replace('', '', $group['name']) . $count; $count = $count+1;?>" onchange = "getResearch(this.id,<?php echo $research; ?>);" class = "chk"  name ="researched[]" type="checkbox" value="<?php echo $group['name']; ?>"><?php echo $group['name']; ?></label>
+					<label><input id = "<?php echo str_replace("'", "", str_replace(' ', '', $group['name'])) . $count; $count = $count+1;?>" onchange = "getResearch(this.id,<?php echo $research; ?>);" class = "chk"  name ="researched[]" type="checkbox" value="<?php echo $group['name']; ?>"><?php echo $group['name']; ?></label>
 				</div>
 				
 				<?php }}?>

@@ -100,7 +100,7 @@ class periodController
 		$returnArray = array();
 
 		$marketshare = $obj->getMarketShare ($stuGroup['game'],$period ); // this will be moved to commit later
-	
+	//	var_dump($marketshare);
 		$groupcount = $obj->getGameGroupCount($game['id']);
 		$groupcount = implode("", $groupcount);
 		

@@ -1061,11 +1061,22 @@ class database
 		$qry = "select revenue from hotel where id =" . $hotel;
 		$r = $this->conn->query($qry);
 		$arr = array();
-		while($result = $r->fetch_assoc())
+		if($r)
 		{
-			$arr[] = $result; 
+			
+		
+			while($result = $r->fetch_assoc())
+			{
+				$arr[] = $result; 
+			}
+			return $arr;
 		}
-		return $arr;
+		else
+		{
+			
+			return false;
+		}
+		
 	}
 	
 	function getLeaderboardTable($game)
@@ -2239,6 +2250,21 @@ class database
         return $resArr;
     }//1
 	
+	public function isPeriod($game, $period) 
+    {       
+		$qry = "SELECT * FROM game_period where game = " . $game . " and period =" . $period. ";";	
+		$r = $this->conn->query($qry );
+		$resArr = array();
+		if($r)
+		{
+			return true;
+		}
+		else
+		{
+			return false;
+		}
+	}
+        
 	
 }
 ?>

@@ -51,12 +51,13 @@ error_reporting(~0);
 		$obj = new database();
 		
 		$decisions = $displayArr[0];
+		//var_dump($decisions );
 		$stuArr = $displayArr[1];
 		$stuGroup = $displayArr[2];
 		$stuLoc = $displayArr[3];
 		
 	
-		if($decisions!=false)
+		if(count($decisions)!=0)
 		{
 			$aveRate = $decisions[0]['aveRate'];
 		}
@@ -71,7 +72,7 @@ error_reporting(~0);
 		$personnel = $displayArr[5];
 		$periodNum = $displayArr[6];
 		$marketshare =  $displayArr[7];
-	
+		//var_dump($marketshare);
 		$groups =   $displayArr[8];
 		
 		
@@ -87,18 +88,28 @@ error_reporting(~0);
 	
 	// here I need to check if last period
 	$pendCheck = $gameContr->checkTime($game['id'], $game['periodNum']);
-	if($pendCheck!= false)
-	{
-		$pend = $pendCheck[0]['pend']  ;
-		$now = new DateTime();
-		//var_dump($pend);
-		if ($now > new DateTime($pend) )
+	
+	
+		if($pendCheck!= false)
 		{
-		//the period is over.  Call bot check and end of period algo
-		print_r($gameContr->botCheck($game['id'], $game['periodNum']));
-		$gameContr->endPeriod($game['id'], $game['periodNum']);
+			if($obj->isPeriod($game['id'], $game['periodNum']+1)== false)
+			{
+			
+			}
+			else
+			{
+				$pend = $pendCheck[0]['pend']  ;
+				$now = new DateTime();
+		
+				if ($now > new DateTime($pend) )
+				{
+		
+					print_r($gameContr->botCheck($game['id'], $game['periodNum']));
+					$gameContr->endPeriod($game['id'], $game['periodNum']);
+				}
+			}
 		}
-	}
+	
 	
 	
 	//$Resul = $gameContr->botCheck($game['id'], $game['periodNum']);
@@ -282,12 +293,9 @@ function redirect(site) {
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                 </button>
-               <!-- <a class="navbar-brand" href="#">-->
-                <!-- <img src="/Images/fiu_logo.png" alt="">    maybe try to make it longer.  let me try something ls to fit Find the image if you can and fix it wait  Let me get you the size--> 
-					
-               <!-- </a> -->
+              
             </div>
-            <!-- Collect the nav links, forms, and other content for toggling -->
+            
             <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
                 <ul class="nav navbar-nav">
                     <li>
@@ -334,24 +342,37 @@ function redirect(site) {
 		<h1 style = "color:blue" align="center">Strategic Marketing Simulator</h1> 
 		
 	<div class="bs-example" style = "padding-left: 30px; padding-right: 30px;"> 
-    <div class="panel panel-default" style = "padding-left: 15px; padding-right: 15px; padding-bottom:15px;">
+ <div class="panel panel-default" style = "padding-left: 15px; padding-right: 15px; padding-bottom:15px;">
 			
 			
+			
+		
 			
 		
 			
 				
 				<div class="pull-right" style = 'padding-top:30px'>
 				<?php 
-				if($commented!=false)
+				if($commented==false)
 				{
 				
-                echo "<input type='submit' align = 'right' name='commit' value = 'Commit Period'  class='btn btn-primary' />";
+					echo "<br/><input type='submit' align = 'right' name='commit' value = 'Commit Period'  class='btn btn-primary' />";
 				
 				}
 				?>
-				</div>
 				
+				<?php
+					if($obj->isPeriod($game['id'], $periodNum+1) == false)
+					{
+						echo  "<div class='panel-body'><h2> Scorecard - Game OVER</h2></div> ";
+					}
+					else
+					{
+						echo  "<div class='panel-body' ><h2> Scorecard - Period" . $periodNum +1 ." </h2></div> ";
+					}
+					
+				?>
+				</div>
         <div class="panel-body" ><h2> Scorecard - Period <?php echo " ". $periodNum+1;?> </h2></div> 
         <div class="panel-footer clearfix" style = "background-color:white"> 
 		<div class="col-sm-3" style=""><h3 style='font-weight: bold'>Group info</h3><h4> Group : <?php echo $stuGroup['name'];  ?>  </h4>  <h4> Hotel Type : <?php echo $stuGroup['type'];  ?>  </h4>
@@ -380,23 +401,28 @@ function redirect(site) {
     </thead>";
 			
 			$i =  0;
-			$k = count($marketShare);
+			$k = count($groups);
+			//var_dump($k);
 			
 				foreach($marketshare as $share)
 				{
 				if($k == $i)
 				{
-					 break;
+					break;
 				}
-				$name = $obj->gethotelname($marketshare[$i]['hotel']);
-					if($groups[$i]['name'] != $stuGroup['name'])
-					{
-						echo "<tr>";
-						echo "<td>" . $name[0]['name']."</td>";
-						echo "<td>" .  round(100 * floatval(($share['groupSold']/$roomsSold)*100))/100  ."% </td>";
-						echo "</tr>";
-					}
-					$i = $i+1;
+				else
+				{
+					$name = $obj->gethotelname($marketshare[$i]['hotel']);
+						if($groups[$i]['name'] != $stuGroup['name'])
+						{
+							echo "<tr>";
+							echo "<td>" . $name[0]['name']."</td>";
+							echo "<td>" .  round(100 * floatval(($share['groupSold']/$roomsSold)*100))/100  ."% </td>";
+							echo "</tr>";
+						}
+					
+				}
+				$i = $i+1;
 				}
 			
 			echo "</tbody></table>";
@@ -495,7 +521,15 @@ function redirect(site) {
 			
 			</div>
 			<div class="col-sm-2" style="" ><h3 style='font-weight: bold'>Allocations</h3>
-			<?php echo "OTA :" .$decisions[0]['OTA']?>
+			<?php
+				if(count($decisions)!= 0)
+				{
+				echo "OTA :" .$decisions[0]['OTA'];
+				}
+			
+			?>
+			
+			
 			
 			</div>
 			

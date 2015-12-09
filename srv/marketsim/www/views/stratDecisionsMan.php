@@ -24,13 +24,9 @@ error_reporting(~0);
 	session_start();
 	if (!isset($_SESSION['admin login'])) 
 	{
-		header("Location: /stratDecisions.php");
+		header("Location: /views/login.php");
 	}
-	else if (!isset($_SESSION['login user'])) 
-	{
-		header("Location: /login.php");
-	}
-	
+
 	//else
 	//{
 		echo "<div style = 'text-align: right; padding-right: 15px'>".$_SESSION['admin login'] . " is not you? login 
@@ -334,24 +330,26 @@ function redirect(site) {
             <!-- Collect the nav links, forms, and other content for toggling -->
             <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
                 <ul class="nav navbar-nav">
-                    <li>
+				   <li>
                         <a href="#"="a" onclick ="redirect('../index.php')"> Home</a>
                     </li>
+                 
                     <li>
-                        <a href="#"="a" onclick ="redirect('metrics.php')">Metrics</a>
+                         <a href="/views/stratDecisions.php"="a" onclick ="redirect('stratDecisions.php')">Strategic Decisions</a>
                     </li>
+				
                     <li>
-                         <a href="#"="a" onclick ="redirect('stratDecisionsMan.php')">Strategic Decisions</a>
+                        <a href="/views/News.php"="a" onclick ="redirect('News.php')">News</a>
                     </li>
 					<li>
-                        <a href="#"="a" onclick ="redirect('ManagePage.php')"> Manage</a>
+                         <a href="/views/reportingPage.php"="a" onclick ="redirect('reportingPage.php')">Reporting</a>
                     </li>
+					<li>
+                         <a href="/views/accountManage.php"="a" onclick ="redirect('accountManage.php')">My Account</a>
+                    </li>					
                     <li>
-                        <a href="#"="a" onclick ="redirect('News.php')">News</a>
-                    </li>
-                    <li>
-                         <a href="#"="a" onclick ="redirect('login.php')">Login</a>
-                    </li>
+                         <a href="/signout.php"="a" onclick ="redirect('signout.php')">Sign Out</a>
+                    </li>	
 					
                 </ul>
             </div>

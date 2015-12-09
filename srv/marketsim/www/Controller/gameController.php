@@ -183,7 +183,11 @@ public function botCheck($game, $period)  // working
 			//var_dump($d);
 		}
 		
-		$trp = $obj->incrementGamePeriodNum($game, $period);
+		$endPeriod = $obj->isPeriod($game, period+1);
+		if($enderiod == false)
+		{
+			$trp = $obj->incrementGamePeriodNum($game, $period);
+		}
 		//var_dump($trp);
 		header("location: /index.php");
 		

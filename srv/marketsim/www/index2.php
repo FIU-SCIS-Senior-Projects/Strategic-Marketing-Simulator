@@ -260,7 +260,7 @@ function redirect(site) {
                         <a href="/views/News.php"="a" onclick ="redirect('/views/News.php')">News</a>
                     </li>
                     <li>
-                         <a href="/signout.php"="a" onclick ="redirect('/views/signout.php')">Sign Out</a>
+                         <a href="/views/signout.php"="a" onclick ="redirect('/views/signout.php')">Sign Out</a>
                     </li>
 					<li>
                          <a href="/views/accountManage.php"="a" onclick ="redirect('/views/accountManage.php')">My Account</a>

@@ -51,10 +51,10 @@
 			else
 				$value = "<b>Failed:</b> ".$temp."<br />";;
 		}
-		unset($_POST['button_ChangedRecovery']);
-		unset($_POST['textbox_CurrentPass2']);
-		unset($_POST['textbox_NewQestion']);
-		unset($_POST['textbox_NewAnswer']);
+		//unset($_POST['button_ChangedRecovery']);
+		//unset($_POST['textbox_CurrentPass2']);
+		//unset($_POST['textbox_NewQestion']);
+		//unset($_POST['textbox_NewAnswer']);
 		
 		$user = $accountController->getUserInfo($email);
 		$value .= $accountController->UserInfoPage($user);
@@ -77,9 +77,9 @@
 			else
 				$value = "<b>Failed:</b> ".$temp."<br />";;
 		}
-		unset($_POST['button_ChangedPassword']);
-		unset($_POST['textbox_CurrentPass1']);
-		unset($_POST['textbox_NewPass']);
+		//unset($_POST['button_ChangedPassword']);
+		//unset($_POST['textbox_CurrentPass1']);
+		//unset($_POST['textbox_NewPass']);
 		
 		$user = $accountController->getUserInfo($email);
 		$value .= $accountController->UserInfoPage($user);
@@ -89,20 +89,20 @@
 	else if(isset($_GET['button_ChangeMyPassword']))//http://marketsim-dev.cis.fiu.edu/Account%20Manage/accountManage.php?button_ChangeMyPassword=Change+My+Password
 	{
 		$value = $accountController->changePasswordPage();
-		unset($_GET['button_ChangeMyPassword']);
+		//unset($_GET['button_ChangeMyPassword']);
 	}
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////	
 	else if(isset($_GET['button_ChangeMyRecovery']))//http://marketsim-dev.cis.fiu.edu/Account%20Manage/accountManage.php?button_ChangeMyRecovery=Change+My+Recovery+Quest%2FAns
 	{
 		$value = $accountController->changeRecoveryPage();
-		unset($_GET['button_ChangeMyRecovery']);
+		//unset($_GET['button_ChangeMyRecovery']);
 	}
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////			
-	else if(isset($_GET['button_ChangedPassword']))
+	/*else if(isset($_GET['button_ChangedPassword']))
 	{
 		$value = "inside changed password";// $accountController->changePasswordPage();
-		unset($_GET['button_ChangedPassword']);
-	}
+		//unset($_GET['button_ChangedPassword']);
+	}*/
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////	
 	else
 	{

@@ -22,6 +22,12 @@ This is the README for the Strategic Marketing Simulator 1.0
 
 Here, we will go over the contents of each folder in the WWW directory
 
+
+
+All Website Files are within /srv/marketsim/www/
+
+Folders inside /www/ contain
+
 [Controller]
 in this folder are helper classes that aid views.
 these classes is where all the logic and work is perform for each webpage.
@@ -49,6 +55,15 @@ Strategic Marketing Simulator uses BootStrap for styling and button designs. the
 
 [js]
 Contains javascript files used for functionality on some Market Sim webpages.
+
+[<no folder>](root)
+These are my teammates files, Jeffrey carman. Im not sure if they're inuse or not.
+
+
+
+bonus: a useful command for when you're getting errors and do not know what is wrong
+sudo tail -n 1 /var/log/apache2/marketsim-error.log
+
 
 
 

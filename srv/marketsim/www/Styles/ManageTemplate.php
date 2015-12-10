@@ -42,7 +42,7 @@
 					<li> <a href="/views/News.php">News</a></li>				
 					<li> <a href="/views/reportingPage.php" >Reporting</a></li>
 					<li> <a href="/views/accountManage.php">My Account</a></li>
-					<li> <a href="/signout.php">Sign Out</a></li>
+					<li> <a href="/views/signout.php">Sign Out</a></li>
                 </ul>
             </div>
             <!-- /.navbar-collapse -->
@@ -53,26 +53,6 @@
 		<!-- CONTENTS -->
 		<?php echo $content; ?>
 		
-		<!--	<div class='' align='center' >
-					<div class='panel-footer clearfix' style='width: 1080px' >
-
-
-						<iframe width='560' height='315' src='https://www.youtube.com/embed/oavMtUWDBTM?list=FLlpvYpjrPP2VmA_-5xV3a0Q' frameborder='0' allowfullscreen></iframe>
-
-						<br /><br />
-						
-						<form action='' method='post'>
-							<input name='button_returnBack' type = 'submit' value = 'Return back' class='btn btn-primary'/>
-							 <input name='button_commit' type = 'submit' value = 'Commit to DataBase' class='btn btn-primary'/>
-						</form>
-						
-					</div>
-				</div>-->
-
-	
-		
-		
-    <!-- /.container 
 
 </body>
 
